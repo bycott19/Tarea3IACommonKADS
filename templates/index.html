@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Experto - Ciberseguridad PYMES</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Sistema Experto de Ciberseguridad para PYMES</h1>
+            <p class="subtitle">Evaluación y recomendaciones personalizadas</p>
+        </header>
+
+        <div class="form-container">
+            <form action="/diagnosticar" method="post">
+                <div class="progress-bar">
+                    <div class="progress" style="width: 100%"></div>
+                </div>
+                
+                <h2>Cuestionario de Evaluación</h2>
+                <p>Responda las siguientes preguntas sobre las prácticas de seguridad en su empresa:</p>
+                
+                {% for pregunta in preguntas %}
+                <div class="pregunta">
+                    <h3>{{ loop.index }}. {{ pregunta.texto }}</h3>
+                    <div class="opciones">
+                        {% for opcion in pregunta.opciones %}
+                        <label class="opcion">
+                            <input type="radio" name="pregunta_{{ pregunta.id }}" value="{{ opcion.valor }}" required>
+                            <span class="radio-custom"></span>
+                            {{ opcion.texto }}
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% if not loop.last %}
+                <hr class="separador">
+                {% endif %}
+                {% endfor %}
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">
+                        Obtener Diagnóstico
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <footer>
+            <p>Sistema Experto - CommonKADS | Trabajo Práctico 3</p>
+        </footer>
+    </div>
+</body>
+</html>
