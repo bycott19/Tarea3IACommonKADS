@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados - Sistema Experto</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    
+    <style>
+        .recomendacion-body .justificacion {
+            font-style: italic;
+            color: #4a5568; 
+            font-size: 0.9em;
+            border-top: 1px dashed #e2e8f0; 
+            padding-top: 10px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Resultados del Diagnóstico</h1>
+            <p class="subtitle">Recomendaciones personalizadas para su empresa</p>
+        </header>
+
+        <div class="results-container">
+            <div class="stats-card">
+                <h3>Resumen del Diagnóstico</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-number">{{ total_recomendaciones }}</span>
+                        <span class="stat-label">Recomendaciones</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">{{ respuestas|length }}</span>
+                        <span class="stat-label">Preguntas Respondidas</span>
+                    </div>
+                </div>
+            </div>
+
+            {% if recomendaciones %}
+            <div class="recomendaciones">
+                <h2>🔍 Recomendaciones de Ciberseguridad</h2>
+                
+                {% for recomendacion in recomendaciones %}
+                <div class="recomendacion-card">
+                    <div class="recomendacion-header">
+                        <h3>{{ recomendacion.titulo }}</h3>
+                    </div>
+                    <div class="recomendacion-body">
+                        <p>{{ recomendacion.descripcion }}</p>
+                        
+                        {% if recomendacion.justificacion %}
+                        <p class="justificacion">
+                            <strong>Razón:</strong> {{ recomendacion.justificacion }}
+                        </p>
+                        {% endif %}
+
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="no-recomendaciones">
+                <h2>🎉 ¡Excelente!</h2>
+                <p>Su empresa cuenta con buenas prácticas de ciberseguridad.</p>
+                <p>Se recomienda realizar evaluaciones periódicas para mantener la seguridad.</p>
+            </div>
+            {% endif %}
+
+            <div class="actions">
+                <a href="/" class="btn-secondary">🔄 Realizar Nuevo Diagnóstico</a>
+            </div>
+        </div>
+
+        <footer>
+            <p>Sistema Experto - CommonKADS | Trabajo Práctico 3</p>
+        </footer>
+    </div>
+</body>
+</html>
