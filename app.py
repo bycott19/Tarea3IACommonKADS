@@ -36,3 +36,37 @@ def guardar_diagnostico(respuestas, recomendaciones):
     except Exception as e:
         print(f"Error al guardar diagnóstico: {e}")
         return False
+@app.route('/')
+def index():
+    """Página principal con el cuestionario"""
+    preguntas = obtener_preguntas()
+    return render_template('index.html', preguntas=preguntas)
+
+@app.route('/diagnosticar', methods=['POST'])
+def diagnosticar():
+    """Procesa el diagnóstico y muestra resultados"""
+    # Obtener respuestas del formulario
+    respuestas = {}
+    for key, value in request.form.items():
+        if key.startswith('pregunta_'):
+            respuestas[key.replace('pregunta_', '')] = value
+    
+    # Evaluar reglas
+    recomendaciones = evaluar_reglas(respuestas)
+    
+    # Guardar en base de datos
+    guardar_diagnostico(respuestas, recomendaciones)
+    
+    return render_template('resultados.html', 
+                         respuestas=respuestas, 
+                         recomendaciones=recomendaciones,
+                         total_recomendaciones=len(recomendaciones))
+
+@app.route('/reiniciar')
+def reiniciar():
+    """Reinicia el diagnóstico"""
+    return render_template('index.html', preguntas=obtener_preguntas())
+
+if __name__ == '__main__':
+    init_db()
+    app.run(debug=True, port=5000)
